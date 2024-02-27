@@ -1,0 +1,38 @@
+{
+	"name": "ayeframe",
+	"version": "0.0.1",
+	"author": "Joel Drapper",
+	"license": "MIT",
+	"type": "module",
+	"description": "Better iframes",
+	"main": "dist/ayeframe.min.js",
+	"types": "dist/ayeframe.d.ts",
+	"funding": {
+		"type": "github",
+		"url": "https://github.com/sponsors/joeldrapper"
+	},
+	"scripts": {
+		"test": "web-test-runner test/**/*.test.js --node-resolve",
+		"build": "tsc && prettier --write ./src ./dist",
+		"watch": "tsc -w",
+		"test:watch": "npm run test -- --watch",
+		"lint": "prettier --check ./src ./dist ./test",
+		"minify": "terser dist/ayeframe.js -o dist/ayeframe.min.js -c -m --module",
+		"prepare": "npm run build && npm run minify",
+		"ship": "npm run prepare && npm run test && npm run lint && npm publish",
+		"format": "prettier --write ./src ./dist ./test",
+		"size": "npm run prepare && gzip-size ./dist/ayeframe.min.js --raw --include-original"
+	},
+	"devDependencies": {
+		"@open-wc/testing": "^3.0.0-next.5",
+		"@web/test-runner": "^0.18.0",
+		"gzip-size-cli": "^5.1.0",
+		"prettier": "^3.2.5",
+		"terser": "^5.28.1",
+		"typescript": "^5.3.3",
+		"typescript-eslint": "^7.0.2"
+	},
+	"dependencies": {
+		"morphlex": "^0.0.6"
+	}
+}
