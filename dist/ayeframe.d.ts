@@ -1,1 +1,1 @@
-export {};
+export declare function ayeFrame(): void;
