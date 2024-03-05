@@ -1,12 +1,12 @@
 {
-	"name": "ayeframe",
+	"name": "phlex",
 	"version": "0.0.1",
 	"author": "Joel Drapper",
 	"license": "MIT",
 	"type": "module",
 	"description": "Better iframes",
-	"main": "dist/ayeframe.min.js",
-	"types": "dist/ayeframe.d.ts",
+	"main": "dist/phlex.min.js",
+	"types": "dist/phlex.d.ts",
 	"funding": {
 		"type": "github",
 		"url": "https://github.com/sponsors/joeldrapper"
@@ -17,11 +17,11 @@
 		"watch": "tsc -w",
 		"test:watch": "npm run test -- --watch",
 		"lint": "prettier --check ./src ./dist ./test",
-		"minify": "terser dist/ayeframe.js -o dist/ayeframe.min.js -c -m --module",
+		"minify": "terser dist/phlex.js -o dist/phlex.min.js -c -m --module",
 		"prepare": "npm run build && npm run minify",
 		"ship": "npm run prepare && npm run test && npm run lint && npm publish",
 		"format": "prettier --write ./src ./dist ./test",
-		"size": "npm run prepare && gzip-size ./dist/ayeframe.min.js --raw --include-original"
+		"size": "npm run prepare && gzip-size ./dist/phlex.min.js --raw --include-original"
 	},
 	"devDependencies": {
 		"@open-wc/testing": "^3.0.0-next.5",
