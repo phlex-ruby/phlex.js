@@ -1,40 +1,5 @@
 import { morph } from "morphlex";
 const Actions = new Map();
-Actions.set("morph", ({ target, node }) => {
-	if (target && node) {
-		morph(target, node);
-	}
-});
-Actions.set("replace", ({ target, node }) => {
-	if (target && node) {
-		target.replaceWith(node);
-	}
-});
-Actions.set("append", ({ target, node }) => {
-	if (target && node) {
-		target.appendChild(node);
-	}
-});
-Actions.set("prepend", ({ target, node }) => {
-	if (target && node) {
-		target.prepend(node);
-	}
-});
-Actions.set("refresh", () => {
-	fetch(document.location.href).then((response) => {
-		if (response.ok) {
-			response.text().then((text) => {
-				morph(document.documentElement, text);
-			});
-		}
-	});
-});
-Actions.set("remove", ({ target }) => {
-	target?.remove();
-});
-Actions.set("navigate", ({ node }) => {
-	if (node) morph(document.documentElement, node);
-});
 export function init() {
 	// document.addEventListener("submit", (event) => {
 	// 	if (event.target instanceof HTMLFormElement) {
@@ -50,9 +15,9 @@ export function init() {
 				return;
 			}
 			const href = link.href;
-			const action = link.dataset.action;
-			const targetId = link.dataset.target;
-			const fragment = link.dataset.fragment;
+			const action = link.getAttribute("phlex-action");
+			const targetId = link.getAttribute("phlex-target");
+			const fragment = link.getAttribute("phlex-fragment");
 			if (action) {
 				event.preventDefault();
 				link.ariaDisabled = "true";
@@ -74,12 +39,39 @@ async function createEvent(href, targetId, fragment) {
 			template.innerHTML = text;
 			const node = template.content.firstElementChild;
 			const target = targetId ? document.getElementById(targetId) : null;
-			return {
-				target,
-				node,
-			};
+			return { targetNode: target, newNode: node };
 		});
 	});
 	return event;
 }
+export function defineAction(name, action) {
+	Actions.set(name, action);
+}
+defineAction("morph", ({ targetNode: target, newNode: node }) => {
+	if (target && node) morph(target, node);
+});
+defineAction("replace", ({ targetNode: target, newNode: node }) => {
+	if (node) target?.replaceWith(node);
+});
+defineAction("append", ({ targetNode: target, newNode: node }) => {
+	if (node) target?.appendChild(node);
+});
+defineAction("prepend", ({ targetNode: target, newNode: node }) => {
+	if (node) target?.prepend(node);
+});
+defineAction("refresh", () => {
+	fetch(document.location.href).then((response) => {
+		if (response.ok) {
+			response.text().then((text) => {
+				morph(document.documentElement, text);
+			});
+		}
+	});
+});
+defineAction("remove", ({ targetNode: target }) => {
+	target?.remove();
+});
+defineAction("navigate", ({ newNode: node }) => {
+	if (node) morph(document.documentElement, node);
+});
 //# sourceMappingURL=phlex.js.map
