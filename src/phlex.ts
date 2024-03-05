@@ -17,31 +17,34 @@ export function init(): void {
 	// });
 
 	document.addEventListener("click", (event) => {
-		const link = event.target;
+		const targetElement = event.target;
+		if (targetElement instanceof Element) {
+			const link = targetElement.closest("a");
 
-		if (link instanceof HTMLAnchorElement) {
-			if (event.metaKey || event.ctrlKey || event.shiftKey) return;
+			if (link instanceof HTMLAnchorElement) {
+				if (event.metaKey || event.ctrlKey || event.shiftKey) return;
 
-			if (link.ariaDisabled) {
-				event.preventDefault();
-				return;
-			}
+				if (link.ariaDisabled) {
+					event.preventDefault();
+					return;
+				}
 
-			const href = link.href;
-			const action = link.getAttribute("phlex-action");
-			const targetId = link.getAttribute("phlex-target");
-			const fragment = link.getAttribute("phlex-fragment");
+				const href = link.href;
+				const action = link.getAttribute("phlex-action");
+				const targetId = link.getAttribute("phlex-target");
+				const fragment = link.getAttribute("phlex-fragment");
 
-			if (action) {
-				event.preventDefault();
-				link.ariaDisabled = "true";
+				if (action) {
+					event.preventDefault();
+					link.ariaDisabled = "true";
 
-				createEvent(href, targetId, fragment).then((event) => {
-					const actionMethod = Actions.get(action);
-					if (actionMethod) actionMethod(event);
+					createEvent(href, targetId, fragment).then((event) => {
+						const actionMethod = Actions.get(action);
+						if (actionMethod) actionMethod(event);
 
-					link.ariaDisabled = null;
-				});
+						link.ariaDisabled = null;
+					});
+				}
 			}
 		}
 	});
